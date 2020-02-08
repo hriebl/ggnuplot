@@ -9,8 +9,8 @@
 
 ggnuplot provides a couple of tools to make your
 [ggplots](https://ggplot2.tidyverse.org/) look like
-[gnuplots](http://www.gnuplot.info/), which is useful if you are mixing
-ggplots and gnuplots in one paper.
+[gnuplots](http://www.gnuplot.info/), which may be helpful if you use
+both of them in one project.
 
 ## Installation
 
@@ -24,9 +24,9 @@ devtools::install_github("hriebl/ggnuplot")
 
 ## Example
 
-ggnuplot features inward ticks, secondary axes, and ticks/labels on the
-corners of the plot. It also provides gnuplot’s default color palette
-for discrete data. This is what it looks like:
+ggnuplot features inward ticks, secondary axes, and labels on the plot
+corners. It also comes with gnuplot’s default color palette. This is
+what it looks like:
 
 ``` r
 library(ggplot2)
@@ -56,12 +56,12 @@ df <- data.frame(
 
 ggplot(df, aes(x, y)) +
   geom_line(color = gnucolors[1]) +
-  geom_smooth(color = gnucolors[1], size = 1.5) +
+  geom_smooth(color = gnucolors[1], size = 1.5, se = FALSE) +
   facet_grid(vars(cat1), vars(cat2)) +
   xlab("MCMC Iterations") +
   ylab(NULL) +
-  scale_x_gnuplot(index = -1, facet = TRUE, expand = c(0, 0)) +
-  scale_y_gnuplot(index = -1, facet = TRUE, expand = c(0, 0)) +
+  scale_x_gnuplot(index = 1:5, facet = TRUE, expand = c(0, 0)) +
+  scale_y_gnuplot(index = 1:5, facet = TRUE, expand = c(0, 0)) +
   theme_gnuplot()
 ```
 
