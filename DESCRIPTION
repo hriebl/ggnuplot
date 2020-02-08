@@ -3,8 +3,8 @@ Title: Make Your ggplots Look Like gnuplots
 Version: 0.0.1
 Authors@R: as.person("Hannes Riebl <hriebl@uni-goettingen.de> [aut, cre]")
 Description: This package provides a couple of tools to make your ggplots look
-    like gnuplots, which might be useful if you are mixing ggplots and gnuplots
-    in one paper.
+    like gnuplots, which is useful if you are mixing ggplots and gnuplots in
+    one paper.
 Imports: ggplot2
 License: MIT + file LICENSE
 Encoding: UTF-8
