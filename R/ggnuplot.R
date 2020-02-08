@@ -87,8 +87,7 @@ scale_color_gnuplot <- function(...,
 #' gnuplot axes for ggplot2
 #'
 #' These functions try to resemble the way gnuplot chooses the axis limits and
-#' breaks/ticks. They set up secondary axes and ticks/labels on the corners of
-#' the plot.
+#' breaks/ticks. They set up secondary axes and labels on the plot corners.
 #'
 #' @usage
 #' scale_x_gnuplot(breaks = 4, index = NULL, facet = FALSE, ...)
@@ -98,7 +97,7 @@ scale_color_gnuplot <- function(...,
 #'
 #' @param breaks The number of (inner) ticks on the axis
 #' @param index If not `NULL`, an index to subset the ticks, e.g. `-1` to
-#'              exclude the tick/label on the left or bottom corner.
+#'              exclude the label on the left or bottom corner
 #' @param facet Whether the plot uses facets or not. If `TRUE`, the secondary
 #'              axis is exluded.
 #' @inheritDotParams ggplot2::scale_x_continuous

@@ -16,7 +16,7 @@ gnubreaks(breaks = 4, index = NULL)
 \item{breaks}{The number of (inner) ticks on the axis}
 
 \item{index}{If not \code{NULL}, an index to subset the ticks, e.g. \code{-1} to
-exclude the tick/label on the left or bottom corner.}
+exclude the label on the left or bottom corner}
 
 \item{facet}{Whether the plot uses facets or not. If \code{TRUE}, the secondary
 axis is exluded.}
@@ -80,8 +80,7 @@ scales, "top" or "bottom" for horizontal scales}
 }
 \description{
 These functions try to resemble the way gnuplot chooses the axis limits and
-breaks/ticks. They set up secondary axes and ticks/labels on the corners of
-the plot.
+breaks/ticks. They set up secondary axes and labels on the plot corners.
 }
 \examples{
 library(ggplot2)
