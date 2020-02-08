@@ -21,7 +21,10 @@ gnupalette <- function(n) {
 
 gnulimits <- function(breaks = 4) {
   function(limits) {
-    round(limits, -floor(log10((limits[2] - limits[1]) / breaks)))
+    digits <- -floor(log10((limits[2] - limits[1]) / (breaks + 1)))
+    limits[1] <- floor(limits[1] * 10^digits) / 10^digits
+    limits[2] <- ceiling(limits[2] * 10^digits) / 10^digits
+    limits
   }
 }
 
@@ -30,7 +33,8 @@ gnulimits <- function(breaks = 4) {
 gnubreaks <- function(breaks = 4, index = NULL) {
   function(limits) {
     out <- seq.int(limits[1], limits[2], length.out = breaks + 2)
-    out <- round(out, -floor(log10((limits[2] - limits[1]) / breaks)) + 1)
+    digits <- -floor(log10((limits[2] - limits[1]) / (breaks + 1))) + 1
+    out <- round(out, digits)
     if (!is.null(index)) out <- out[index]
     out
   }
