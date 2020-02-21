@@ -22,7 +22,8 @@ theme_gnuplot(
 }
 \description{
 This theme makes ggplot2 look like gnuplot.
-It is based on \code{\link[ggplot2:theme_linedraw]{ggplot2::theme_linedraw()}} and has inward ticks.
+It is based on \code{\link[ggplot2:ggtheme]{ggplot2::theme_linedraw()}}
+and has inward ticks.
 }
 \examples{
 library(ggplot2)
@@ -35,5 +36,5 @@ ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
   theme_gnuplot()
 }
 \seealso{
-\code{\link[ggplot2:theme_linedraw]{ggplot2::theme_linedraw()}}, \code{\link[ggplot2:theme]{ggplot2::theme()}}
+\code{\link[ggplot2:ggtheme]{ggplot2::theme_linedraw()}}, \code{\link[ggplot2:theme]{ggplot2::theme()}}
 }

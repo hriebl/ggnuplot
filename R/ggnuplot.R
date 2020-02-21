@@ -61,12 +61,12 @@ gnulabels <- function() {
 #' scale_color_gnuplot(..., na.value = "grey50", aesthetics = "color")
 #' gnupalette(n)
 #'
-#' @inheritDotParams ggplot2::discrete_scale
-#' @inheritParams ggplot2::scale_colour_hue
+#' @param ... Passed on to [ggplot2::discrete_scale()]
+#' @inheritParams ggplot2::scale_color_discrete
 #' @param n The number of colors to return from the palette
 #'
 #' @seealso
-#' [ggplot2::scale_color_hue()]
+#' [`ggplot2::scale_color_discrete()`][ggplot2::scale_hue]
 #'
 #' @examples
 #' library(ggplot2)
@@ -107,7 +107,8 @@ scale_color_gnuplot <- function(...,
 #'                plot borders relative to the plot width. A number between
 #'                0 and 0.5.
 #' @inheritParams ggplot2::scale_x_continuous
-#' @inheritDotParams ggplot2::scale_x_continuous
+#' @param ... Passed on to
+#'            [`ggplot2::scale_*_continuous()`][ggplot2::scale_continuous]
 #'
 #' @examples
 #' library(ggplot2)
@@ -168,12 +169,13 @@ scale_y_gnuplot <- function(nbreaks = 5, padding = 0.1, breaks, labels,
 #' gnuplot theme for ggplot2
 #'
 #' This theme makes ggplot2 look like gnuplot.
-#' It is based on [ggplot2::theme_linedraw()] and has inward ticks.
+#' It is based on [`ggplot2::theme_linedraw()`][ggplot2::ggtheme]
+#' and has inward ticks.
 #'
 #' @inheritParams ggplot2::theme_linedraw
 #'
 #' @seealso
-#' [ggplot2::theme_linedraw()], [ggplot2::theme()]
+#' [`ggplot2::theme_linedraw()`][ggplot2::ggtheme], [ggplot2::theme()]
 #'
 #' @examples
 #' library(ggplot2)
