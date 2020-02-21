@@ -97,8 +97,8 @@ scale_color_gnuplot <- function(...,
 #' They also set up secondary axes.
 #'
 #' @usage
-#' scale_x_gnuplot(nbreaks = 5, padding = 0.1, ...)
-#' scale_y_gnuplot(nbreaks = 5, padding = 0.1, ...)
+#' scale_x_gnuplot(nbreaks = 5, padding = 0.1, breaks, labels, sec.axis, ...)
+#' scale_y_gnuplot(nbreaks = 5, padding = 0.1, breaks, labels, sec.axis, ...)
 #' gnubreaks(nbreaks = 5, padding = 0.1)
 #' gnulabels()
 #'
@@ -106,6 +106,7 @@ scale_color_gnuplot <- function(...,
 #' @param padding The amount of space between the outmost ticks and the
 #'                plot borders relative to the plot width. A number between
 #'                0 and 0.5.
+#' @inheritParams ggplot2::scale_x_continuous
 #' @inheritDotParams ggplot2::scale_x_continuous
 #'
 #' @examples
@@ -130,35 +131,37 @@ scale_color_gnuplot <- function(...,
 #' gnulabels()(breaks)
 #' @aliases gnubreaks gnulabels scale_y_gnuplot
 #' @importFrom ggplot2 dup_axis scale_x_continuous
-#' @importFrom rlang dots_list exec
 #' @export
 
-scale_x_gnuplot <- function(nbreaks = 5, padding = 0.1, ...) {
-  dots <- dots_list(
-    ...,
-    breaks = gnubreaks(nbreaks, padding),
-    labels = gnulabels(),
-    sec.axis = dup_axis(labels = NULL, name = ""),
-    .homonyms = "first"
-  )
+scale_x_gnuplot <- function(nbreaks = 5, padding = 0.1, breaks, labels,
+                            sec.axis, ...) {
+  if (missing(breaks)) breaks <- gnubreaks(nbreaks, padding)
+  if (missing(labels)) labels <- gnulabels()
+  if (missing(sec.axis)) sec.axis <- dup_axis(labels = NULL, name = "")
 
-  exec(scale_x_continuous, !!!dots)
+  scale_x_continuous(
+    breaks = breaks,
+    labels = labels,
+    sec.axis = sec.axis,
+    ...
+  )
 }
 
 #' @importFrom ggplot2 dup_axis scale_y_continuous
-#' @importFrom rlang dots_list exec
 #' @export
 
-scale_y_gnuplot <- function(nbreaks = 5, padding = 0.1, ...) {
-  dots <- dots_list(
-    ...,
-    breaks = gnubreaks(nbreaks, padding),
-    labels = gnulabels(),
-    sec.axis = dup_axis(labels = NULL, name = ""),
-    .homonyms = "first"
-  )
+scale_y_gnuplot <- function(nbreaks = 5, padding = 0.1, breaks, labels,
+                            sec.axis, ...) {
+  if (missing(breaks)) breaks <- gnubreaks(nbreaks, padding)
+  if (missing(labels)) labels <- gnulabels()
+  if (missing(sec.axis)) sec.axis <- dup_axis(labels = NULL, name = "")
 
-  exec(scale_y_continuous, !!!dots)
+  scale_y_continuous(
+    breaks = breaks,
+    labels = labels,
+    sec.axis = sec.axis,
+    ...
+  )
 }
 
 

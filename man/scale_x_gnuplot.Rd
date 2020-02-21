@@ -7,8 +7,8 @@
 \alias{scale_y_gnuplot}
 \title{gnuplot axes for ggplot2}
 \usage{
-scale_x_gnuplot(nbreaks = 5, padding = 0.1, ...)
-scale_y_gnuplot(nbreaks = 5, padding = 0.1, ...)
+scale_x_gnuplot(nbreaks = 5, padding = 0.1, breaks, labels, sec.axis, ...)
+scale_y_gnuplot(nbreaks = 5, padding = 0.1, breaks, labels, sec.axis, ...)
 gnubreaks(nbreaks = 5, padding = 0.1)
 gnulabels()
 }
@@ -19,14 +19,7 @@ gnulabels()
 plot borders relative to the plot width. A number between
 0 and 0.5.}
 
-\item{...}{
-  Arguments passed on to \code{\link[ggplot2:scale_x_continuous]{ggplot2::scale_x_continuous}}
-  \describe{
-    \item{\code{name}}{The name of the scale. Used as the axis or legend title. If
-\code{waiver()}, the default, the name of the scale is taken from the first
-mapping used for that aesthetic. If \code{NULL}, the legend title will be
-omitted.}
-    \item{\code{breaks}}{One of:
+\item{breaks}{One of:
 \itemize{
 \item \code{NULL} for no breaks
 \item \code{waiver()} for the default breaks computed by the
@@ -35,15 +28,8 @@ transformation object
 \item A function that takes the limits as input and returns breaks
 as output
 }}
-    \item{\code{minor_breaks}}{One of:
-\itemize{
-\item \code{NULL} for no minor breaks
-\item \code{waiver()} for the default breaks (one minor break between
-each major break)
-\item A numeric vector of positions
-\item A function that given the limits returns a vector of minor breaks.
-}}
-    \item{\code{labels}}{One of:
+
+\item{labels}{One of:
 \itemize{
 \item \code{NULL} for no labels
 \item \code{waiver()} for the default labels computed by the
@@ -51,6 +37,24 @@ transformation object
 \item A character vector giving labels (must be same length as \code{breaks})
 \item A function that takes the breaks as input and returns labels
 as output
+}}
+
+\item{sec.axis}{specify a secondary axis}
+
+\item{...}{
+  Arguments passed on to \code{\link[ggplot2:scale_x_continuous]{ggplot2::scale_x_continuous}}
+  \describe{
+    \item{\code{name}}{The name of the scale. Used as the axis or legend title. If
+\code{waiver()}, the default, the name of the scale is taken from the first
+mapping used for that aesthetic. If \code{NULL}, the legend title will be
+omitted.}
+    \item{\code{minor_breaks}}{One of:
+\itemize{
+\item \code{NULL} for no minor breaks
+\item \code{waiver()} for the default breaks (one minor break between
+each major break)
+\item A numeric vector of positions
+\item A function that given the limits returns a vector of minor breaks.
 }}
     \item{\code{limits}}{One of:
 \itemize{
@@ -82,7 +86,6 @@ are defined in the scales package, and are called \code{name_trans}, e.g.
 transformation with \code{\link[scales:trans_new]{scales::trans_new()}}.}
     \item{\code{position}}{The position of the axis. "left" or "right" for vertical
 scales, "top" or "bottom" for horizontal scales}
-    \item{\code{sec.axis}}{specify a secondary axis}
   }}
 }
 \description{
