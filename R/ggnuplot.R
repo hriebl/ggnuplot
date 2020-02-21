@@ -19,24 +19,31 @@ gnupalette <- function(n) {
 
 #' @export
 
-gnulimits <- function(breaks = 4) {
+gnubreaks <- function(nbreaks = 5, padding = 0.1) {
   function(limits) {
-    digits <- -floor(log10((limits[2] - limits[1]) / (breaks + 1)))
-    limits[1] <- floor(limits[1] * 10^digits) / 10^digits
-    limits[2] <- ceiling(limits[2] * 10^digits) / 10^digits
-    limits
+    width <- limits[2] - limits[1]
+    min <- limits[1] + padding * width
+    max <- limits[2] - padding * width
+    seq.int(min, max, length.out = nbreaks)
   }
 }
 
 #' @export
 
-gnubreaks <- function(breaks = 4, index = NULL) {
-  function(limits) {
-    out <- seq.int(limits[1], limits[2], length.out = breaks + 2)
-    digits <- -floor(log10((limits[2] - limits[1]) / (breaks + 1))) + 1
-    out <- round(out, digits)
-    if (!is.null(index)) out <- out[index]
-    out
+gnulabels <- function() {
+  function(breaks) {
+    nbreaks <- length(breaks)
+    min <- breaks[1]
+    max <- breaks[nbreaks]
+    between <- (max - min) / (nbreaks - 1)
+    digits <- -floor(log10(between))
+    try <- round(breaks, digits)
+    if (max(abs((diff(try) - between) / between)) <= 0.05) {
+      breaks <- try
+    } else {
+      breaks <- round(breaks, digits + 1)
+    }
+    format(breaks)
   }
 }
 
@@ -86,20 +93,19 @@ scale_color_gnuplot <- function(...,
 
 #' gnuplot axes for ggplot2
 #'
-#' These functions try to resemble the way gnuplot chooses the axis limits and
-#' breaks/ticks. They set up secondary axes and labels on the plot corners.
+#' These functions try to choose pretty axis breaks/ticks and labels.
+#' They also set up secondary axes.
 #'
 #' @usage
-#' scale_x_gnuplot(breaks = 4, index = NULL, facet = FALSE, ...)
-#' scale_y_gnuplot(breaks = 4, index = NULL, facet = FALSE, ...)
-#' gnulimits(breaks = 4)
-#' gnubreaks(breaks = 4, index = NULL)
+#' scale_x_gnuplot(nbreaks = 5, padding = 0.1, ...)
+#' scale_y_gnuplot(nbreaks = 5, padding = 0.1, ...)
+#' gnubreaks(nbreaks = 5, padding = 0.1)
+#' gnulabels()
 #'
-#' @param breaks The number of (inner) ticks on the axis
-#' @param index If not `NULL`, an index to subset the ticks, e.g. `-1` to
-#'              exclude the label on the left or bottom corner
-#' @param facet Whether the plot uses facets or not. If `TRUE`, the secondary
-#'              axis is exluded.
+#' @param nbreaks The number of breaks/ticks on the axis
+#' @param padding The amount of space between the outmost ticks and the
+#'                plot borders relative to the plot width. A number between
+#'                0 and 0.5.
 #' @inheritDotParams ggplot2::scale_x_continuous
 #'
 #' @examples
@@ -116,42 +122,50 @@ scale_color_gnuplot <- function(...,
 #' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
 #'   geom_point() +
 #'   scale_color_gnuplot() +
-#'   scale_x_continuous(breaks = gnubreaks(), limits = gnulimits()) +
-#'   scale_y_continuous(breaks = gnubreaks(), limits = gnulimits()) +
+#'   scale_x_gnuplot(sec.axis = waiver()) +
+#'   scale_y_gnuplot(sec.axis = waiver()) +
 #'   theme_gnuplot()
 #'
-#' gnulimits()(limits = c(10, 990))
-#' gnubreaks()(limits = c(0, 1000))
-#' @aliases gnubreaks gnulimits scale_y_gnuplot
-#' @importFrom ggplot2 dup_axis scale_x_continuous waiver
+#' breaks <- gnubreaks()(limits = c(0, 1000))
+#' gnulabels()(breaks)
+#' @aliases gnubreaks gnulabels scale_y_gnuplot
+#' @importFrom ggplot2 dup_axis scale_x_continuous
+#' @importFrom rlang dots_list exec
 #' @export
 
-scale_x_gnuplot <- function(breaks = 4, index = NULL, facet = FALSE, ...) {
-  scale_x_continuous(
-    breaks = gnubreaks(breaks, index),
-    limits = gnulimits(breaks),
-    sec.axis = if (facet) waiver() else dup_axis(labels = NULL, name = ""),
-    ...
+scale_x_gnuplot <- function(nbreaks = 5, padding = 0.1, ...) {
+  dots <- dots_list(
+    ...,
+    breaks = gnubreaks(nbreaks, padding),
+    labels = gnulabels(),
+    sec.axis = dup_axis(labels = NULL, name = ""),
+    .homonyms = "first"
   )
+
+  exec(scale_x_continuous, !!!dots)
 }
 
-#' @importFrom ggplot2 dup_axis scale_y_continuous waiver
+#' @importFrom ggplot2 dup_axis scale_y_continuous
+#' @importFrom rlang dots_list exec
 #' @export
 
-scale_y_gnuplot <- function(breaks = 4, index = NULL, facet = FALSE, ...) {
-  scale_y_continuous(
-    breaks = gnubreaks(breaks, index),
-    limits = gnulimits(breaks),
-    sec.axis = if (facet) waiver() else dup_axis(labels = NULL, name = ""),
-    ...
+scale_y_gnuplot <- function(nbreaks = 5, padding = 0.1, ...) {
+  dots <- dots_list(
+    ...,
+    breaks = gnubreaks(nbreaks, padding),
+    labels = gnulabels(),
+    sec.axis = dup_axis(labels = NULL, name = ""),
+    .homonyms = "first"
   )
+
+  exec(scale_y_continuous, !!!dots)
 }
 
 
 #' gnuplot theme for ggplot2
 #'
-#' This theme makes ggplot2 look like gnuplot. It is based on
-#' [ggplot2::theme_linedraw()] and has inward ticks.
+#' This theme makes ggplot2 look like gnuplot.
+#' It is based on [ggplot2::theme_linedraw()] and has inward ticks.
 #'
 #' @inheritParams ggplot2::theme_linedraw
 #'

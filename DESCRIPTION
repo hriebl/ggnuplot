@@ -4,7 +4,7 @@ Version: 0.0.1
 Authors@R: as.person("Hannes Riebl <hriebl@uni-goettingen.de> [aut, cre]")
 Description: This package provides a couple of tools to make your ggplots look
     like gnuplots, which may be helpful if you use both of them in one project.
-Imports: ggplot2
+Imports: ggplot2, rlang
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

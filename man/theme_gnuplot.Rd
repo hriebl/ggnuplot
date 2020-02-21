@@ -21,8 +21,8 @@ theme_gnuplot(
 \item{base_rect_size}{base size for rect elements}
 }
 \description{
-This theme makes ggplot2 look like gnuplot. It is based on
-\code{\link[ggplot2:theme_linedraw]{ggplot2::theme_linedraw()}} and has inward ticks.
+This theme makes ggplot2 look like gnuplot.
+It is based on \code{\link[ggplot2:theme_linedraw]{ggplot2::theme_linedraw()}} and has inward ticks.
 }
 \examples{
 library(ggplot2)

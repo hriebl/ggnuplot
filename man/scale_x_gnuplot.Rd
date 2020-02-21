@@ -3,23 +3,21 @@
 \name{scale_x_gnuplot}
 \alias{scale_x_gnuplot}
 \alias{gnubreaks}
-\alias{gnulimits}
+\alias{gnulabels}
 \alias{scale_y_gnuplot}
 \title{gnuplot axes for ggplot2}
 \usage{
-scale_x_gnuplot(breaks = 4, index = NULL, facet = FALSE, ...)
-scale_y_gnuplot(breaks = 4, index = NULL, facet = FALSE, ...)
-gnulimits(breaks = 4)
-gnubreaks(breaks = 4, index = NULL)
+scale_x_gnuplot(nbreaks = 5, padding = 0.1, ...)
+scale_y_gnuplot(nbreaks = 5, padding = 0.1, ...)
+gnubreaks(nbreaks = 5, padding = 0.1)
+gnulabels()
 }
 \arguments{
-\item{breaks}{The number of (inner) ticks on the axis}
+\item{nbreaks}{The number of breaks/ticks on the axis}
 
-\item{index}{If not \code{NULL}, an index to subset the ticks, e.g. \code{-1} to
-exclude the label on the left or bottom corner}
-
-\item{facet}{Whether the plot uses facets or not. If \code{TRUE}, the secondary
-axis is exluded.}
+\item{padding}{The amount of space between the outmost ticks and the
+plot borders relative to the plot width. A number between
+0 and 0.5.}
 
 \item{...}{
   Arguments passed on to \code{\link[ggplot2:scale_x_continuous]{ggplot2::scale_x_continuous}}
@@ -28,6 +26,15 @@ axis is exluded.}
 \code{waiver()}, the default, the name of the scale is taken from the first
 mapping used for that aesthetic. If \code{NULL}, the legend title will be
 omitted.}
+    \item{\code{breaks}}{One of:
+\itemize{
+\item \code{NULL} for no breaks
+\item \code{waiver()} for the default breaks computed by the
+transformation object
+\item A numeric vector of positions
+\item A function that takes the limits as input and returns breaks
+as output
+}}
     \item{\code{minor_breaks}}{One of:
 \itemize{
 \item \code{NULL} for no minor breaks
@@ -79,8 +86,8 @@ scales, "top" or "bottom" for horizontal scales}
   }}
 }
 \description{
-These functions try to resemble the way gnuplot chooses the axis limits and
-breaks/ticks. They set up secondary axes and labels on the plot corners.
+These functions try to choose pretty axis breaks/ticks and labels.
+They also set up secondary axes.
 }
 \examples{
 library(ggplot2)
@@ -96,10 +103,10 @@ ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
 ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
   geom_point() +
   scale_color_gnuplot() +
-  scale_x_continuous(breaks = gnubreaks(), limits = gnulimits()) +
-  scale_y_continuous(breaks = gnubreaks(), limits = gnulimits()) +
+  scale_x_gnuplot(sec.axis = waiver()) +
+  scale_y_gnuplot(sec.axis = waiver()) +
   theme_gnuplot()
 
-gnulimits()(limits = c(10, 990))
-gnubreaks()(limits = c(0, 1000))
+breaks <- gnubreaks()(limits = c(0, 1000))
+gnulabels()(breaks)
 }

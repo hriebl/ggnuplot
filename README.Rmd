@@ -35,8 +35,8 @@ devtools::install_github("hriebl/ggnuplot")
 
 ## Example
 
-ggnuplot features inward ticks, secondary axes, and labels on the plot corners.
-It also comes with gnuplot's default color palette. This is what it looks like:
+ggnuplot features inward ticks and secondary axes. It also comes with gnuplot's
+default color palette. This is what it looks like:
 
 ```{r example1, dpi = 300, fig.width = 10}
 library(ggplot2)
@@ -68,8 +68,8 @@ ggplot(df, aes(x, y)) +
   facet_grid(vars(cat1), vars(cat2)) +
   xlab("MCMC Iterations") +
   ylab(NULL) +
-  scale_x_gnuplot(index = 1:5, facet = TRUE, expand = c(0, 0)) +
-  scale_y_gnuplot(index = 1:5, facet = TRUE, expand = c(0, 0)) +
+  scale_x_gnuplot(expand = c(0, 0), sec.axis = waiver()) +
+  scale_y_gnuplot(sec.axis = waiver()) +
   theme_gnuplot()
 ```
 
