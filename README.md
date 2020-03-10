@@ -7,10 +7,9 @@
 
 <!-- badges: end -->
 
-ggnuplot provides a couple of tools to make your
-[ggplots](https://ggplot2.tidyverse.org/) look like
-[gnuplots](http://www.gnuplot.info/), which may be helpful if you use
-both of them in one project.
+ggnuplot is a [ggplot2](https://ggplot2.tidyverse.org/) theme that makes
+your ggplots look like [gnuplots](http://www.gnuplot.info/). This may be
+helpful if you use both of them in one project.
 
 ## Installation
 
