@@ -37,13 +37,13 @@ gnulabels <- function() {
     max <- breaks[nbreaks]
     between <- (max - min) / (nbreaks - 1)
     digits <- -floor(log10(between))
-    try <- round(breaks, digits)
-    if (max(abs((diff(try) - between) / between)) <= 0.05) {
-      breaks <- try
-    } else {
-      breaks <- round(breaks, digits + 1)
+    out <- round(breaks, digits)
+
+    if (any(abs(diff(out) - between) / between > 0.05)) {
+      out <- round(breaks, digits + 1)
     }
-    format(breaks)
+
+    format(out)
   }
 }
 
