@@ -1,12 +1,13 @@
 Package: ggnuplot
 Title: Make Your ggplots Look Like gnuplots
-Version: 0.0.1
+Version: 0.0.2
 Authors@R: as.person("Hannes Riebl <hriebl@uni-goettingen.de> [aut, cre]")
 Description: This package provides a couple of tools to make your ggplots look
-    like gnuplots, which may be helpful if you use both of them in one project.
+    like gnuplots, which may be helpful if you use both ggplot2 and gnuplot in
+    one project.
 Imports: ggplot2
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0

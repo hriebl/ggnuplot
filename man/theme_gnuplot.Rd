@@ -34,7 +34,8 @@ ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
   scale_x_gnuplot() +
   scale_y_gnuplot() +
   theme_gnuplot()
+
 }
 \seealso{
-\code{\link[ggplot2:ggtheme]{ggplot2::theme_linedraw()}}, \code{\link[ggplot2:theme]{ggplot2::theme()}}
+The \link[ggplot2:ggtheme]{default ggplot2 themes} and \code{\link[ggplot2:theme]{ggplot2::theme()}}
 }

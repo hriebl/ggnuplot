@@ -9,7 +9,7 @@
 
 ggnuplot is a [ggplot2](https://ggplot2.tidyverse.org/) theme that makes
 your ggplots look like [gnuplots](http://www.gnuplot.info/). This may be
-helpful if you use both of them in one project.
+helpful if you use both ggplot2 and gnuplot in one project.
 
 ## Installation
 
@@ -21,10 +21,10 @@ You can install the development version of ggnuplot from
 devtools::install_github("hriebl/ggnuplot")
 ```
 
-## Example
+## Examples
 
 ggnuplot features inward ticks and secondary axes. It also comes with
-gnuplot’s default color palette. This is what it looks like:
+gnuplot’s default color palette. Here is what it looks like:
 
 ``` r
 library(ggplot2)
@@ -58,8 +58,8 @@ ggplot(df, aes(x, y)) +
   facet_grid(vars(cat1), vars(cat2)) +
   xlab("MCMC Iterations") +
   ylab(NULL) +
-  scale_x_gnuplot(expand = c(0, 0), sec.axis = waiver()) +
-  scale_y_gnuplot(sec.axis = waiver()) +
+  scale_x_gnuplot(expand = c(0, 0)) +
+  scale_y_gnuplot(limits = c(-3.5, 3.5)) +
   theme_gnuplot()
 ```
 

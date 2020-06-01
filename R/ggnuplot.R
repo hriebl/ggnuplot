@@ -1,72 +1,16 @@
-#' @export
-
-gnucolors <- c(
-  "darkviolet",
-  "#009e73",
-  "#56b4e9",
-  "#e69f00",
-  "#f0e442",
-  "#0072b2",
-  "#e51e10",
-  "black"
-)
-
-#' @export
-
-gnupalette <- function(n) {
-  gnucolors[(seq.int(0, n - 1) %% length(gnucolors)) + 1]
-}
-
-#' @export
-
-gnubreaks <- function(nbreaks = 5, padding = 0.1) {
-  function(limits) {
-    width <- limits[2] - limits[1]
-    min <- limits[1] + padding * width
-    max <- limits[2] - padding * width
-    seq.int(min, max, length.out = nbreaks)
-  }
-}
-
-#' @export
-
-gnulabels <- function() {
-  function(breaks) {
-    nbreaks <- length(breaks)
-    min <- breaks[1]
-    max <- breaks[nbreaks]
-    between <- (max - min) / (nbreaks - 1)
-    digits <- -floor(log10(between))
-    out <- round(breaks, digits)
-
-    if (any(abs(diff(out) - between) / between > 0.05)) {
-      out <- round(breaks, digits + 1)
-    }
-
-    format(out)
-  }
-}
-
-
-#' gnuplot's default color palette for discrete data, ported to ggplot2
+#' The gnuplot color palette for discrete data, ported to ggplot2
 #'
-#' These functions provide gnuplot's default color palette. Use the function
-#' `scale_color_gnuplot()` with ggplot2, and the function `gnupalette()` or the
-#' vector `gnucolors` otherwise.
-#'
-#' Attention: Do not use this palette with more than eight categories, as the
-#' colors are recycled on the ninth category!
+#' These functions provide gnuplot's default color palette.
+#' Use `scale_color_gnuplot()` and `scale_fill_gnuplot()` with ggplot2,
+#' and `gnupalette()` or the vector `gnucolors` otherwise.
 #'
 #' @usage
-#' scale_color_gnuplot(..., na.value = "grey50", aesthetics = "color")
+#' scale_color_gnuplot(..., na.value = "gray50", aesthetics = "color")
+#' scale_fill_gnuplot(..., na.value = "gray50", aesthetics = "fill")
 #' gnupalette(n)
 #'
-#' @param ... Passed on to [ggplot2::discrete_scale()]
 #' @inheritParams ggplot2::scale_color_discrete
-#' @param n The number of colors to return from the palette
-#'
-#' @seealso
-#' [`ggplot2::scale_color_discrete()`][ggplot2::scale_hue]
+#' @param n The number of colors to return
 #'
 #' @examples
 #' library(ggplot2)
@@ -80,35 +24,72 @@ gnulabels <- function() {
 #'
 #' gnupalette(3)
 #' gnucolors[1:3]
-#' @aliases gnucolors gnupalette
+#'
+#' @aliases scale_colour_gnuplot scale_fill_gnuplot gnupalette gnucolors
 #' @importFrom ggplot2 discrete_scale
 #' @export
 
-scale_color_gnuplot <- function(...,
-                                na.value = "grey50",
+scale_color_gnuplot <- function(..., na.value = "gray50",
                                 aesthetics = "color") {
   discrete_scale(aesthetics, "gnuplot", gnupalette, na.value = na.value, ...)
 }
 
+#' @export
 
-#' gnuplot axes for ggplot2
+scale_colour_gnuplot <- scale_color_gnuplot
+
+#' @export
+
+scale_fill_gnuplot <- function(..., na.value = "gray50",
+                               aesthetics = "fill") {
+  discrete_scale(aesthetics, "gnuplot", gnupalette, na.value = na.value, ...)
+}
+
+#' @export
+
+gnupalette <- function(n) {
+  if (n > length(gnucolors)) {
+    stop("The gnuplot color palette has only ", length(gnucolors), " colors")
+  }
+
+  gnucolors[1:n]
+}
+
+#' @export
+
+gnucolors <- c(
+  "darkviolet",
+  "#009e73",
+  "#56b4e9",
+  "#e69f00",
+  "#f0e442",
+  "#0072b2",
+  "#e51e10",
+  "black"
+)
+
+
+#' gnuplot-like (continuous) axes for ggplot2
 #'
-#' These functions try to choose pretty axis breaks/ticks and labels.
-#' They also set up secondary axes.
+#' These functions set up gnuplot-like secondary axes. They also try to choose
+#' pretty breaks/ticks for continuous data. Your mileage with the breaks/ticks
+#' may vary, so be sure to try different settings.
 #'
 #' @usage
-#' scale_x_gnuplot(nbreaks = 5, padding = 0.1, breaks, labels, sec.axis, ...)
-#' scale_y_gnuplot(nbreaks = 5, padding = 0.1, breaks, labels, sec.axis, ...)
-#' gnubreaks(nbreaks = 5, padding = 0.1)
-#' gnulabels()
+#' scale_x_gnuplot(breaks = gnubreaks(), sec.axis = gnuaxis(), ...)
+#' scale_y_gnuplot(breaks = gnubreaks(), sec.axis = gnuaxis(), ...)
+#' gnubreaks(n = 5, padding = 0.1)
 #'
-#' @param nbreaks The number of breaks/ticks on the axis
-#' @param padding The amount of space between the outmost ticks and the
-#'                plot borders relative to the plot width. A number between
-#'                0 and 0.5.
 #' @inheritParams ggplot2::scale_x_continuous
-#' @param ... Passed on to
-#'            [`ggplot2::scale_*_continuous()`][ggplot2::scale_continuous]
+#' @param n The number of breaks/ticks to return
+#' @param padding The amount of space between the outermost breaks/ticks and
+#'                the axis limits relative to the axis range. A number between
+#'                0 and 0.5.
+#'
+#' @seealso
+#' The [labeling package][labeling::labeling-package] for alternative
+#' break/tick functions, and [`ggplot2::dup_axis()`][ggplot2::sec_axis],
+#' for which `gnuaxis()` is an alias
 #'
 #' @examples
 #' library(ggplot2)
@@ -120,49 +101,53 @@ scale_color_gnuplot <- function(...,
 #'   scale_y_gnuplot() +
 #'   theme_gnuplot()
 #'
-#' # Alternatively, without the secondary axis:
-#' ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
-#'   geom_point() +
-#'   scale_color_gnuplot() +
-#'   scale_x_gnuplot(sec.axis = waiver()) +
-#'   scale_y_gnuplot(sec.axis = waiver()) +
-#'   theme_gnuplot()
-#'
-#' breaks <- gnubreaks()(limits = c(0, 1000))
-#' gnulabels()(breaks)
-#' @aliases gnubreaks gnulabels scale_y_gnuplot
-#' @importFrom ggplot2 dup_axis scale_x_continuous
+#' @aliases scale_y_gnuplot gnubreaks gnuaxis
+#' @importFrom ggplot2 scale_x_continuous
 #' @export
 
-scale_x_gnuplot <- function(nbreaks = 5, padding = 0.1, breaks, labels,
-                            sec.axis, ...) {
-  if (missing(breaks)) breaks <- gnubreaks(nbreaks, padding)
-  if (missing(labels)) labels <- gnulabels()
-  if (missing(sec.axis)) sec.axis <- dup_axis(labels = NULL, name = "")
-
-  scale_x_continuous(
-    breaks = breaks,
-    labels = labels,
-    sec.axis = sec.axis,
-    ...
-  )
+scale_x_gnuplot <- function(breaks = gnubreaks(), sec.axis = gnuaxis(), ...) {
+  scale_x_continuous(breaks = breaks, sec.axis = sec.axis, ...)
 }
 
-#' @importFrom ggplot2 dup_axis scale_y_continuous
+#' @importFrom ggplot2 scale_y_continuous
 #' @export
 
-scale_y_gnuplot <- function(nbreaks = 5, padding = 0.1, breaks, labels,
-                            sec.axis, ...) {
-  if (missing(breaks)) breaks <- gnubreaks(nbreaks, padding)
-  if (missing(labels)) labels <- gnulabels()
-  if (missing(sec.axis)) sec.axis <- dup_axis(labels = NULL, name = "")
+scale_y_gnuplot <- function(breaks = gnubreaks(), sec.axis = gnuaxis(), ...) {
+  scale_y_continuous(breaks = breaks, sec.axis = sec.axis, ...)
+}
 
-  scale_y_continuous(
-    breaks = breaks,
-    labels = labels,
-    sec.axis = sec.axis,
-    ...
-  )
+#' @export
+
+gnubreaks <- function(n = 5, padding = 0.1) {
+  function(limits) {
+    range <- limits[2] - limits[1]
+
+    min <- limits[1] + padding * range
+    max <- limits[2] - padding * range
+
+    breaks <- seq(min, max, length.out = n)
+
+    # find appropriate rounding
+
+    between <- (max - min) / (n - 1)
+    digits <- -floor(log10(between))
+    rounded <- round(breaks, digits)
+
+    while (any(abs(diff(rounded) - between) > 0.01 * between)) {
+      digits <- digits + 1
+      rounded <- round(breaks, digits)
+    }
+
+    rounded
+  }
+}
+
+#' @importFrom ggplot2 derive dup_axis
+#' @export
+
+gnuaxis <- function(trans = ~., name = "", breaks = derive(), labels = NULL,
+                    guide = derive()) {
+  dup_axis(trans, name, breaks, labels, guide)
 }
 
 
@@ -175,7 +160,7 @@ scale_y_gnuplot <- function(nbreaks = 5, padding = 0.1, breaks, labels,
 #' @inheritParams ggplot2::theme_linedraw
 #'
 #' @seealso
-#' [`ggplot2::theme_linedraw()`][ggplot2::ggtheme], [ggplot2::theme()]
+#' The [default ggplot2 themes][ggplot2::ggtheme] and [ggplot2::theme()]
 #'
 #' @examples
 #' library(ggplot2)
@@ -186,15 +171,16 @@ scale_y_gnuplot <- function(nbreaks = 5, padding = 0.1, breaks, labels,
 #'   scale_x_gnuplot() +
 #'   scale_y_gnuplot() +
 #'   theme_gnuplot()
+#'
 #' @importFrom ggplot2 element_blank element_rect element_text margin theme
 #'                     theme_linedraw unit %+replace%
 #' @export
 
-theme_gnuplot <- function(base_size = 11,
-                          base_family = "",
+theme_gnuplot <- function(base_size = 11, base_family = "",
                           base_line_size = base_size / 22,
                           base_rect_size = base_size / 22) {
   large <- 1.5 * base_size
+  medium <- 1.125 * base_size
   small <- 0.75 * base_size
   tiny <- 0.375 * base_size
 
@@ -204,22 +190,21 @@ theme_gnuplot <- function(base_size = 11,
     base_line_size = base_line_size,
     base_rect_size = base_rect_size
   ) %+replace% theme(
-    axis.text = element_text(),
-    axis.text.x = element_text(),
-    axis.text.x.bottom = element_text(margin = margin(t = large)),
-    axis.text.x.top = element_text(margin = margin(b = large)),
-    axis.text.y = element_text(),
-    axis.text.y.left = element_text(margin = margin(r = large)),
-    axis.text.y.right = element_text(margin = margin(l = large)),
-    axis.title.x = element_text(),
-    axis.title.x.bottom = element_text(margin = margin(t = small)),
-    axis.title.x.top = element_text(margin = margin(b = small)),
-    axis.title.y = element_text(),
-    axis.title.y.left = element_text(angle = 90, margin = margin(r = small)),
-    axis.title.y.right = element_text(angle = -90, margin = margin(l = small)),
-    axis.ticks.length = unit(-small, "pt"),
-    panel.grid = element_blank(),
-    strip.background = element_blank(),
-    strip.text = element_text(margin = margin(tiny, tiny, tiny, tiny))
+    axis.title.x       = element_text(vjust = 1, margin = margin(t = small)),
+    axis.title.x.top   = element_text(vjust = 0, margin = margin(b = small)),
+    axis.title.y       = element_text(vjust = 1, angle =  90, margin = margin(r = small)),
+    axis.title.y.right = element_text(vjust = 0, angle = -90, margin = margin(l = small)),
+    axis.text          = element_text(),
+    axis.text.x        = element_text(vjust = 1, margin = margin(t = large)),
+    axis.text.x.top    = element_text(vjust = 0, margin = margin(b = large)),
+    axis.text.y        = element_text(hjust = 1, margin = margin(r = large)),
+    axis.text.y.right  = element_text(hjust = 0, margin = margin(l = large)),
+    axis.ticks.length  = unit(-small, "pt"),
+    legend.text        = element_text(),
+    panel.grid         = element_blank(),
+    strip.background   = element_blank(),
+    strip.placement    = "outside",
+    strip.text         = element_text(margin = margin(tiny, tiny, medium, tiny)),
+    strip.text.y       = element_text(angle = -90, margin = margin(tiny, tiny, tiny, medium))
   )
 }

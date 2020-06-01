@@ -2,51 +2,40 @@
 % Please edit documentation in R/ggnuplot.R
 \name{scale_x_gnuplot}
 \alias{scale_x_gnuplot}
-\alias{gnubreaks}
-\alias{gnulabels}
 \alias{scale_y_gnuplot}
-\title{gnuplot axes for ggplot2}
+\alias{gnubreaks}
+\alias{gnuaxis}
+\title{gnuplot-like (continuous) axes for ggplot2}
 \usage{
-scale_x_gnuplot(nbreaks = 5, padding = 0.1, breaks, labels, sec.axis, ...)
-scale_y_gnuplot(nbreaks = 5, padding = 0.1, breaks, labels, sec.axis, ...)
-gnubreaks(nbreaks = 5, padding = 0.1)
-gnulabels()
+scale_x_gnuplot(breaks = gnubreaks(), sec.axis = gnuaxis(), ...)
+scale_y_gnuplot(breaks = gnubreaks(), sec.axis = gnuaxis(), ...)
+gnubreaks(n = 5, padding = 0.1)
 }
 \arguments{
-\item{nbreaks}{The number of breaks/ticks on the axis}
-
-\item{padding}{The amount of space between the outmost ticks and the
-plot borders relative to the plot width. A number between
-0 and 0.5.}
-
 \item{breaks}{One of:
 \itemize{
 \item \code{NULL} for no breaks
 \item \code{waiver()} for the default breaks computed by the
-transformation object
+\link[scales:trans_new]{transformation object}
 \item A numeric vector of positions
 \item A function that takes the limits as input and returns breaks
-as output
+as output (e.g., a function returned by \code{\link[scales:extended_breaks]{scales::extended_breaks()}})
 }}
 
-\item{labels}{One of:
-\itemize{
-\item \code{NULL} for no labels
-\item \code{waiver()} for the default labels computed by the
-transformation object
-\item A character vector giving labels (must be same length as \code{breaks})
-\item A function that takes the breaks as input and returns labels
-as output
-}}
+\item{sec.axis}{\code{\link[ggplot2:sec_axis]{sec_axis()}} is used to specify a secondary axis.}
 
-\item{sec.axis}{specify a secondary axis}
+\item{...}{Other arguments passed on to \verb{scale_(x|y)_continuous()}}
 
-\item{...}{Passed on to
-\code{\link[ggplot2:scale_continuous]{ggplot2::scale_*_continuous()}}}
+\item{n}{The number of breaks/ticks to return}
+
+\item{padding}{The amount of space between the outermost breaks/ticks and
+the axis limits relative to the axis range. A number between
+0 and 0.5.}
 }
 \description{
-These functions try to choose pretty axis breaks/ticks and labels.
-They also set up secondary axes.
+These functions set up gnuplot-like secondary axes. They also try to choose
+pretty breaks/ticks for continuous data. Your mileage with the breaks/ticks
+may vary, so be sure to try different settings.
 }
 \examples{
 library(ggplot2)
@@ -58,14 +47,9 @@ ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
   scale_y_gnuplot() +
   theme_gnuplot()
 
-# Alternatively, without the secondary axis:
-ggplot(iris, aes(Sepal.Width, Sepal.Length, color = Species)) +
-  geom_point() +
-  scale_color_gnuplot() +
-  scale_x_gnuplot(sec.axis = waiver()) +
-  scale_y_gnuplot(sec.axis = waiver()) +
-  theme_gnuplot()
-
-breaks <- gnubreaks()(limits = c(0, 1000))
-gnulabels()(breaks)
+}
+\seealso{
+The \link[labeling:labeling-package]{labeling package} for alternative
+break/tick functions, and \code{\link[ggplot2:sec_axis]{ggplot2::dup_axis()}},
+for which \code{gnuaxis()} is an alias
 }
