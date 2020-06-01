@@ -1,10 +1,12 @@
 Package: ggnuplot
-Title: Make Your ggplots Look Like gnuplots
-Version: 0.0.2
-Authors@R: as.person("Hannes Riebl <hriebl@uni-goettingen.de> [aut, cre]")
-Description: This package provides a couple of tools to make your ggplots look
-    like gnuplots, which may be helpful if you use both ggplot2 and gnuplot in
-    one project.
+Title: Make 'ggplot2' Look Like 'gnuplot'
+Version: 0.1.0
+Authors@R: c(
+    person("Hannes", "Riebl", , "hriebl@uni-goettingen.de", c("aut", "cre"))
+    )
+Description: Provides a theme, a discrete color palette, and continuous scales
+    to make 'ggplot2' look like 'gnuplot'. This may be helpful if you use both
+    'ggplot2' and 'gnuplot' in one project.
 Imports: ggplot2
 License: MIT + file LICENSE
 Encoding: UTF-8
